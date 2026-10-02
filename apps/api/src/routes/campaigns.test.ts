@@ -101,7 +101,7 @@ describe("campaign routes", () => {
       expect(body.status).toBe("open");
     });
 
-    it("rejects an out-of-range budget as 400 VALIDATION_ERROR rather than a raw DB error (F6)", async () => {
+    it("rejects an out-of-range budget as 400 VALIDATION_ERROR rather than a raw DB error", async () => {
       const res = await app.inject({
         method: "POST",
         url: "/campaigns",

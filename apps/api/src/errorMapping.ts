@@ -20,8 +20,7 @@ const STATUS_BY_CODE: Record<ErrorCode, number> = {
  *
  * Logs `err.code` on every response — this is what makes the README's observability claim
  * ("stable codes designed to be dashboarded directly") actually true: without a log line
- * carrying the code, there is nothing for a log-based dashboard to aggregate (F17,
- * independent review).
+ * carrying the code, there is nothing for a log-based dashboard to aggregate.
  */
 export function sendApplicationError(reply: FastifyReply, err: unknown): FastifyReply {
   if (err instanceof ApplicationError) {

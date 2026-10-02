@@ -25,7 +25,7 @@ const GENRES: [Genre, ...Genre[]] = [
 
 // Below Postgres `integer` (int4) range on every money/views column these feed
 // (packages/db/src/schema.ts) — rejected here as 400 VALIDATION_ERROR rather than reaching
-// the database as a raw out-of-range error (F6 in the independent review).
+// the database as a raw out-of-range error.
 const MAX_MONEY_CENTS = 2_000_000_000;
 
 const createCampaignBodySchema = z.object({

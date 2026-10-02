@@ -162,9 +162,9 @@ describe("closing job — concurrency and races", () => {
       const releaseCloser = deferred();
 
       // Drives the REAL closer and pauses it, under the lock, via the test-only
-      // onLockAcquired hook (F8 — the previous version of this test hand-copied the closer's
-      // claim query into the test body, so it would keep passing even if closing.ts lost its
-      // row lock entirely).
+      // onLockAcquired hook — an earlier version of this test hand-copied the closer's claim
+      // query into the test body instead, so it would have kept passing even if closing.ts
+      // lost its row lock entirely.
       const closerPromise = closeNextDueCampaign(handleA.db, {
         onLockAcquired: async () => {
           lockAcquired.resolve();

@@ -149,7 +149,7 @@ export async function closeNextDueCampaign(db: Database, options: CloseNextOptio
       // decidedAt (not updatedAt) carries the close timestamp — updatedAt stays the
       // creator's own last-edit time, both because selectWinners' tiebreak reads it (plan
       // §4.6: "earlier updated_at first") and because it's the creator-facing audit trail;
-      // the close must not overwrite either (F18, independent review).
+      // the close must not overwrite either.
       for (const won of selection.selected) {
         await tx
           .update(bids)

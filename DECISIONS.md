@@ -496,6 +496,34 @@ being unavailable.
 existing doc claim true rather than aspirational, and the UI edges being one-line-per-page
 additions once a shared `ErrorRetry`/`ErrorBoundary` component existed.
 
+## 2026-10-02 — Global error handler now passes through Fastify's own 4xx errors; added a 404 envelope
+
+**What:** `apps/api/src/app.ts`'s `setErrorHandler` previously mapped every non-`ApplicationError`
+to `500 INTERNAL` unconditionally. It now checks `error.statusCode`: anything in the 4xx range
+(e.g. Fastify's own body-parser error for malformed JSON, thrown before a route handler even
+runs) gets the documented `VALIDATION_ERROR` envelope at its real status code; only genuinely
+unexpected errors still map to `500 INTERNAL`. Also added `setNotFoundHandler`, so an unknown
+route returns the same `{ error: { code: "NOT_FOUND", message } }` envelope instead of
+Fastify's native 404 body.
+**Why:** Verified live against the pushed build: `POST /campaigns` with a malformed JSON body
+returned `500 INTERNAL` instead of `400 VALIDATION_ERROR` — a regression from the handler
+added to fix F6 (raw Postgres errors leaking to clients), which never accounted for Fastify's
+own pre-route-handler errors having a perfectly good status code of their own. Two new tests
+in `errorHandler.test.ts` cover both the malformed-body and unknown-route cases.
+**Also:** stripped the remaining dangling `(F<n>, independent review)` citations from 9
+shipped source/test files (`closing.ts`, `campaigns.ts`, `errorMapping.ts`, `web/Dockerfile`,
+`eslint.config.js`, `seed.ts`, `errorHandler.test.ts`, `campaigns.test.ts`,
+`closing-race.test.ts`) — `REVIEW_FIXES.md` (the document those citations referenced) was
+deliberately excluded from the repo, so the citations were dangling references to a document
+no reader of the shipped code has access to. Each comment keeps its substantive rationale,
+just without the now-meaningless tag. `DECISIONS.md`'s own references to "the independent
+review" are left as-is: unlike a source comment, this file's whole purpose is to record *why*
+a decision was made, and "an external review flagged X" is itself legitimate provenance here.
+**Verified:** `pnpm lint && pnpm typecheck && pnpm test:run` all green (124 tests); live
+`curl` against the rebuilt `api` container confirms `400 VALIDATION_ERROR` for malformed JSON
+and `404 NOT_FOUND` for an unknown route; `git grep` confirms zero remaining `F<n>`/
+"independent review" references outside this file.
+
 ---
 
 <!-- New entries go below this line. -->

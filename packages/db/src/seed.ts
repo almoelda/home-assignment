@@ -273,7 +273,7 @@ async function main() {
 
   // Campaign 2 — short-ish deadline for a live demo of bidding end-to-end. 20 minutes, not 3:
   // a 3-minute window was usually already settled by the time a reviewer finished reading the
-  // README's quick-start steps and got here (F14 in the independent review). The README's own
+  // README's quick-start steps and got here. The README's own
   // demo flow now leads with Create Campaign's "2 minutes (demo)" preset instead, which a
   // reviewer controls the timing of directly; this campaign is the fallback for bidding on an
   // already-existing one.

@@ -25,9 +25,8 @@ export default tseslint.config(
       ],
     },
   },
-  // F20 (independent review): the base config above is `recommended`-only, with no
-  // react-hooks rules, so a whole class of UI bug (stale closures, hooks called
-  // conditionally) went unlinted in apps/web.
+  // The base config above is `recommended`-only, with no react-hooks rules, so a whole
+  // class of UI bug (stale closures, hooks called conditionally) went unlinted in apps/web.
   {
     files: ["apps/web/src/**/*.{ts,tsx}"],
     plugins: { "react-hooks": reactHooks },

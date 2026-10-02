@@ -23,7 +23,7 @@ RUN pnpm --filter @marketplace/web run build
 
 # Unprivileged nginx image: runs as the non-root `nginx` user out of the box (listens on
 # 8080, writable pid/cache paths already set up) — IMPLEMENTATION_PLAN.md §14 says "non-root
-# containers"; plain nginx:alpine's master process runs as root (F16, independent review).
+# containers"; plain nginx:alpine's master process runs as root.
 FROM nginxinc/nginx-unprivileged:1.27-alpine AS runtime
 COPY --from=build /repo/apps/web/dist /usr/share/nginx/html
 COPY apps/web/nginx.conf /etc/nginx/conf.d/default.conf

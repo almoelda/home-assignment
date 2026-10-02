@@ -5,7 +5,7 @@ import { buildApp } from "./app.js";
 const DATABASE_URL =
   process.env.DATABASE_URL ?? "postgres://marketplace:marketplace@localhost:5432/marketplace";
 
-describe("global error handler (F6)", () => {
+describe("global error handler", () => {
   let dbHandle: DbHandle;
 
   beforeAll(() => {
@@ -30,6 +30,37 @@ describe("global error handler (F6)", () => {
     expect(res.statusCode).toBe(500);
     expect(res.json()).toEqual({ error: { code: "INTERNAL", message: "internal error" } });
     expect(res.payload).not.toContain("sensitive internal detail");
+
+    await app.close();
+  });
+
+  it("maps Fastify's own 4xx errors (e.g. malformed JSON body) to VALIDATION_ERROR, not INTERNAL", async () => {
+    const app = buildApp({ db: dbHandle.db });
+    await app.ready();
+
+    // Fastify's body parser throws before any route handler runs — this never reaches
+    // packages/application at all, so it's a genuine client mistake, not a server failure.
+    const res = await app.inject({
+      method: "POST",
+      url: "/campaigns",
+      headers: { "content-type": "application/json" },
+      payload: "{not json",
+    });
+
+    expect(res.statusCode).toBe(400);
+    expect(res.json()).toMatchObject({ error: { code: "VALIDATION_ERROR" } });
+
+    await app.close();
+  });
+
+  it("maps an unknown route to the documented NOT_FOUND envelope, not Fastify's default 404", async () => {
+    const app = buildApp({ db: dbHandle.db });
+    await app.ready();
+
+    const res = await app.inject({ method: "GET", url: "/__test/does-not-exist" });
+
+    expect(res.statusCode).toBe(404);
+    expect(res.json()).toMatchObject({ error: { code: "NOT_FOUND" } });
 
     await app.close();
   });
