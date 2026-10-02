@@ -1,0 +1,1 @@
+ALTER TABLE "bids" ADD COLUMN "decided_at" timestamp with time zone;

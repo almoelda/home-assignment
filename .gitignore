@@ -1,0 +1,17 @@
+node_modules/
+dist/
+build/
+.env
+*.log
+.DS_Store
+coverage/
+.turbo/
+pnpm-debug.log*
+*.tsbuildinfo
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# Internal review working file — not part of the submission (see its own header).
+REVIEW_FIXES.md

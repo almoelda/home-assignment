@@ -1,0 +1,31 @@
+{
+  "name": "creator-marketplace",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "pnpm -r --if-present run typecheck",
+    "test": "pnpm -r --if-present run test",
+    "test:run": "pnpm -r --if-present run test:run",
+    "build": "pnpm -r --if-present run build",
+    "db:migrate": "pnpm --filter @marketplace/db run migrate",
+    "db:seed": "pnpm --filter @marketplace/db run seed",
+    "dev:api": "pnpm --filter @marketplace/api run dev",
+    "dev:worker": "pnpm --filter @marketplace/worker run dev",
+    "dev:web": "pnpm --filter @marketplace/web run dev"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "eslint": "^9.17.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.0"
+  }
+}
